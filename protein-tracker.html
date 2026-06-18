@@ -150,18 +150,13 @@
     z-index: 9;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-bottom-color: var(--border-visible);
+
     border-radius: 12px;
     padding: 20px;
     margin-top: 20px;
     margin-bottom: 0;
   }
 
-  .summary-sep {
-    height: 1px;
-    background: var(--border-visible);
-    margin: 0;
-  }
 
   .metric { margin-bottom: 20px; }
   .metric:last-child { margin-bottom: 0; }
@@ -697,7 +692,6 @@
       <div class="hit" id="p-hit">Target Protein Tercapai</div>
     </div>
   </div>
-  <div class="summary-sep"></div>
   <div id="app-makan"></div>
   <div class="reset-row"><button class="reset-btn" id="reset-makan">Reset Makan Hari Ini</button></div>
   <p class="footnote">Centang tiap sumber protein yang sudah dimakan.<br>Tersimpan otomatis & reset tiap hari baru.</p>
@@ -722,7 +716,6 @@
       <div class="hit" id="r-hit">Aturan Easy Terpenuhi</div>
     </div>
   </div>
-  <div class="summary-sep"></div>
   <div id="app-latihan"></div>
   <div class="note"><b>Aturan lari kamu:</b> dari 2 lari/minggu, <b>minimal 1 WAJIB true easy</b>. Patokan easy: bisa ngobrol / napas lewat hidung, terasa kelambatan. Pace boleh sangat pelan (7:30–8:30/km wajar di panas Jakarta) — pelan itu fitur, bukan bug. Maksimal 1 sesi quality/keras per minggu, dan itu opsional.</div>
   <div class="reset-row"><button class="reset-btn" id="reset-latihan">Reset Minggu Ini</button></div>
