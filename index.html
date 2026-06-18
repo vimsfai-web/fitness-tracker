@@ -143,8 +143,11 @@
     color: var(--black);
   }
 
-  /* ── SUMMARY CARD ── */
+  /* ── SUMMARY CARD (STICKY) ── */
   .summary {
+    position: sticky;
+    top: var(--header-h, 110px);
+    z-index: 9;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -949,6 +952,14 @@
   tabs.makan.tab.addEventListener("click", () => switchTab("makan"));
   tabs.latihan.tab.addEventListener("click", () => switchTab("latihan"));
   tabs.kalender.tab.addEventListener("click", () => switchTab("kalender"));
+
+  /* Hitung tinggi header agar summary card sticky tepat di bawahnya */
+  function updateHeaderHeight() {
+    const h = document.querySelector('header').offsetHeight;
+    document.documentElement.style.setProperty('--header-h', h + 'px');
+  }
+  updateHeaderHeight();
+  window.addEventListener('resize', updateHeaderHeight);
 
   /* ============ RESET ============ */
   document.getElementById("reset-makan").addEventListener("click", () => {
