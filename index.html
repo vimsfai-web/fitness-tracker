@@ -608,6 +608,44 @@
   .modal-btn.confirm { background: var(--text-display); border: none; color: var(--black); }
   .modal-btn:active  { opacity: 0.6; }
 
+  /* ── BACKUP ROW ── */
+  .backup-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .backup-btn {
+    background: transparent;
+    border: 1px solid var(--border-visible);
+    color: var(--text-secondary);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color 150ms, color 150ms;
+  }
+
+  .backup-btn:active { border-color: var(--text-display); color: var(--text-display); }
+
+  .backup-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--success);
+    text-align: center;
+    margin-top: 10px;
+    min-height: 16px;
+    transition: opacity 300ms;
+  }
+
   .hidden { display: none; }
 </style>
 </head>
@@ -689,6 +727,12 @@
     </div>
   </div>
   <p class="footnote">Tanggal diberi warna penuh saat tab Makan tercentang<br>penuh atau sesi Latihan hari itu selesai.</p>
+  <div class="backup-row">
+    <button class="backup-btn" id="btn-export">Export</button>
+    <button class="backup-btn" id="btn-import">Import</button>
+    <input type="file" id="import-file" accept=".json" class="hidden">
+  </div>
+  <div class="backup-status" id="backup-status"></div>
 </div>
 
 <!-- ====== MODAL ====== -->
@@ -919,6 +963,55 @@
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     document.getElementById("date").textContent = dd + ' / ' + mm;
   }
+
+  /* ============ EXPORT / IMPORT ============ */
+  function showStatus(msg, isError) {
+    const el = document.getElementById('backup-status');
+    el.textContent = msg;
+    el.style.color = isError ? 'var(--accent)' : 'var(--success)';
+    el.style.opacity = '1';
+    setTimeout(() => { el.style.opacity = '0'; setTimeout(() => { el.textContent = ''; }, 300); }, 2500);
+  }
+
+  document.getElementById('btn-export').addEventListener('click', () => {
+    const data = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key.startsWith('meal-') || key.startsWith('workout-') || key === 'cal-log' || key === 'theme') {
+        data[key] = localStorage.getItem(key);
+      }
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'fitness-backup-' + ymd(new Date()) + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showStatus('[EXPORTED]');
+  });
+
+  document.getElementById('btn-import').addEventListener('click', () => {
+    document.getElementById('import-file').click();
+  });
+
+  document.getElementById('import-file').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        Object.keys(data).forEach(key => localStorage.setItem(key, data[key]));
+        load(); renderMakan(); renderLatihan(); renderCalendar();
+        e.target.value = '';
+        showStatus('[IMPORTED]');
+      } catch(err) {
+        showStatus('[ERROR: FILE TIDAK VALID]', true);
+      }
+    };
+    reader.readAsText(file);
+  });
 
   /* ============ THEME TOGGLE ============ */
   function updateToggleLabel() {
