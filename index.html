@@ -16,15 +16,15 @@
   /* background */
   x.fillStyle='#000000';
   x.fillRect(0,0,512,512);
-  /* green accent bar */
-  x.fillStyle='#4A9E5C';
-  x.fillRect(56,340,400,18);
-  /* "FT" text */
+  /* "FT" text - smaller font so both letters fit */
   x.fillStyle='#FFFFFF';
-  x.font='bold 230px monospace';
+  x.font='bold 160px Arial, sans-serif';
   x.textAlign='center';
   x.textBaseline='middle';
-  x.fillText('FT',256,230);
+  x.fillText('FT',256,240);
+  /* green accent bar */
+  x.fillStyle='#4A9E5C';
+  x.fillRect(80,340,352,14);
   var l=document.createElement('link');
   l.rel='apple-touch-icon';
   l.href=c.toDataURL('image/png');
